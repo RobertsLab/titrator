@@ -1,2 +1,4 @@
-# titrator
-Data and SOPs for titrator
+# Titration Data
+Directory for storing all titration data files.
+
+---
