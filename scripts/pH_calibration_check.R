@@ -1,3 +1,11 @@
+#
+# This script is currently under development.
+# It is non-functional.
+# 20180206 SJW
+#
+
+
+#################
 #install.packages("tidyverse")
 #install.packages("whoami")
 
@@ -14,3 +22,4 @@ setwd(file.path("c:/Users/", win_user, "/gitrepos/RobertsLab/titrator/data/cal_d
 # Set up list/array comparisons of files in folder.
 
 # Operate on newly added file.
+
