@@ -37,19 +37,19 @@ pH3.5 <- 200
 mol_to_umol <- 1000000
 
 # Sample mass (grams)
-mass1 <- 50.0101
-mass2 <- 50.0106
-mass3 <- 50.0086
-mass4 <- 50.0301
-mass5 <- 50.0177
-mass6 <- 49.9911
+mass1 <- 50.001
+mass2 <- 50.0118
+mass3 <- 50.0011
+mass4 <- 
+mass5 <- 
+mass6 <- 
 mass7
 mass8
 
 #Read files
-data1 <- read.csv(file = "")
-data2 <- read.csv(file = "")
-data3 <- read.csv(file = "")
+data1 <- read_csv(file = "20180206_IO01_bubbling.csv")
+data2 <- read.csv(file = "20180206_IO02_bubbling.csv")
+data3 <- read.csv(file = "20180206_IO03_bubbling.csv")
 data4 <- read.csv(file = "")
 data5 <- read.csv(file = "")
 data6 <- read.csv(file = "")
@@ -61,7 +61,7 @@ data8 <- read.csv(file = "")
 # potential data (T) and convert to vector (.$E)
 # volume data (V) and convert to vector (.$V)
 
-data1_T <- data1 %>% filter(E <= pH3.0 & E >= pH3.5) %>% select(T) %>% .$T
+data1_T <- data1 %>%filter(E <= pH3.0 & E >= pH3.5) %>% select(T) %>% .$T
 data1_E <- data1 %>% filter(E <= pH3.0 & E >= pH3.5) %>% select(E) %>% .$E
 data1_volume <- data1 %>% filter(E <= pH3.0 & E >= pH3.5) %>% select(V) %>% .$V
 
@@ -95,9 +95,9 @@ data8_volume <- data8 %>% filter(E <= pH3.0 & E >= pH3.5) %>% select(V) %>% .$V
 
 
 #Calculates TA for designated sample
-TA_01 <- mol_to_umol*(at(C=A10_concentration, d=A10_density, S=35, T=data1_T, weight=mass1, E=data1_E, volume=data1_volume))
-TA_02 <- mol_to_umol*(at(C=A10_concentration, d=A10_density, S=35, T=data2_T, weight=mass2, E=data2_E, volume=data2_volume))
-TA_03 <- mol_to_umol*(at(C=A10_concentration, d=A10_density, S=35, T=data3_T, weight=mass3, E=data3_E, volume=data3_volume))
+TA_01 <- mol_to_umol*(at(S=33.481, T=data1_T, C=A10_concentration, d=A10_density, weight=mass1, E=data1_E, volume=data1_volume))
+TA_02 <- mol_to_umol*(at(S=33.481, T=data2_T, C=A10_concentration, d=A10_density, weight=mass2, E=data2_E, volume=data2_volume))
+TA_03 <- mol_to_umol*(at(S=33.481, T=data3_T, C=A10_concentration, d=A10_density, weight=mass3, E=data3_E, volume=data3_volume))
 TA_04 <- mol_to_umol*(at(C=A10_concentration, d=A10_density, S=35, T=data4_T, weight=mass4, E=data4_E, volume=data4_volume))
 TA_05 <- mol_to_umol*(at(C=A10_concentration, d=A10_density, S=35, T=data5_T, weight=mass5, E=data5_E, volume=data5_volume))
 TA_06 <- mol_to_umol*(at(C=A10_concentration, d=A10_density, S=35, T=data6_T, weight=mass6, E=data6_E, volume=data6_volume))
