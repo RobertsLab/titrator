@@ -68,7 +68,7 @@ weights_with_units <- data1[grep("^Sample size", data1$V1), 2]
 # Ddetermines the string length by converting to characters and counting the characters.
 # Uses grep to search for rows in column 1 that begin with "Sample size".
 # Subtracts two from character length to account for "<space>g" at end of entry.
-weight_char_counts <- data1[grep("^Sample size", data1$V1), 2] %>% 
+weight_char_counts <- weights_with_units %>% 
   nchar() %>% 
   as.numeric() - 2
 
