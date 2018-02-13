@@ -30,8 +30,14 @@ pH3.5 <- 200
 
 mol_to_umol <- 1000000
 
+
+# Load file
 data_file <- '2018-02-09T14_50_38_TA_titration_T232.csv'
 
+
+### Read data in as csv table that handles issue of having more columns in bottom portion of file than in top portion.
+# Sets file encoding to rm weird characters
+# Sets number of columns and assigns column names (V#) based on total number of fields detected in the file.
 data1 <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(data_file, sep = ',')) - 1)), fill = TRUE)
 
 
