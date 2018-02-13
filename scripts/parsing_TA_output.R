@@ -1,14 +1,9 @@
+install.packages("seacarb")
+install.packages("whoami")
+install.packages("tidyverse")
 library(seacarb)
-library(XLConnect)
 library(tidyverse)
 library(whoami)
-
-# Extracts current Windows username.
-win_user <- username()
-
-### Set working directory.
-# Set working directory to titration data Git repo.
-setwd(file.path("c:/Users/", win_user, "/gitrepos/RobertsLab/titrator/data/titration_data"))
 
 # Acid titrant constants
 #Batch A10
