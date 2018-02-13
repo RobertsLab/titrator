@@ -58,7 +58,8 @@ total_samples <- as.numeric(data1[2,2] %>% substr(11,11))
 # Pulls the weight field by searching for rows with "Sample size".
 weights_with_units <- data1[grep("^Sample size", data1$V1), 2]
 
-# Then determines the string length by converting to characters and counting the characters.
+# Ddetermines the string length by converting to characters and counting the characters.
+# Uses grep to search for rows in column 1 that begin with "Sample size".
 # Subtracts two from character length to account for "<space>g" at end of entry.
 weight_char_counts <- data1[grep("^Sample size", data1$V1), 2] %>% 
   nchar() %>% 
