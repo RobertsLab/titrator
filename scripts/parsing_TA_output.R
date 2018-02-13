@@ -7,7 +7,7 @@ library(whoami)
 win_user <- username()
 
 ### Set working directory.
-# Set working directory to titrator calibration data Git repo.
+# Set working directory to titration data Git repo.
 setwd(file.path("c:/Users/", win_user, "/gitrepos/RobertsLab/titrator/data/titration_data"))
 
 # Acid titrant constants
@@ -30,8 +30,13 @@ pH3.5 <- 200
 
 mol_to_umol <- 1000000
 
+data_file <- '2018-02-09T14_50_38_TA_titration_T232.csv'
 
-data1 <- read.csv(file = "2018-02-09T14_50_38_TA_titration_T232.csv", header = FALSE, stringsAsFactors = FALSE, fileEncoding="UTF-8-BOM")
+data1 <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(data_file, sep = ',')))), fill = TRUE)
+
+
+
+
 
 # Pulls total sample number from Row 2, Col. 2, position 11.
 # Converts from string to number.
