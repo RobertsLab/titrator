@@ -27,7 +27,7 @@ mol_to_umol <- 1000000
 
 
 # Load file
-data_file <- '2018-02-09T14_50_38_TA_titration_T232.csv'
+data_file <- 'data/titration_data/example_data.csv'
 
 
 ### Read data in as csv table that handles issue of having more columns in bottom portion of file than in top portion.
@@ -45,6 +45,18 @@ data1 <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, fileEnc
 total_samples <- as.numeric(data1[2,2] %>% substr(11,11))
 
 
+### Extract sample names
+
+# Identifies rows starting with "Scope" in column 1
+sample_name_positions <- grep("^Scope", data1$V1) 
+
+# Subsets the entire data set based on a subset of sample_name_positions.
+# Uses the length of the sample_name_positions vector divide by two because there are two entries per sample in the dataset.
+sample_list <- data1[sample_name_positions[1:(length(sample_name_positions)/2)], 2] 
+
+# Pulls out the actual sample names using the number of characters, minus 1 to get rid of ending ")" in cells, as the stop value for substr.
+sample_names <- substr(sample_list, 14, as.numeric(nchar(sample_list))-1)
+
 
 ### Extracts weight from first sample
 
@@ -61,6 +73,7 @@ weight_char_counts <- data1[grep("^Sample size", data1$V1), 2] %>%
   as.numeric() - 2
 
 # Removes the last two characters from the weight field (<space>g)
+# of each entry in the weights_with_units vector.
 sample_weights <- as.numeric(substr(weights_with_units,1,weight_char_counts))
                              
 
