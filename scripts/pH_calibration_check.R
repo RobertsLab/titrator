@@ -38,15 +38,17 @@ pH3.5_3.0 <-c(3.5, 3.0) #Vector of titration endpoint pH values
 
 
 # Calculate mean voltages (E) for each pH buffer; this data is in column 2
-#
 mean_E_pH4.0 <- mean(as.numeric(cal_data[130:159,2])) #Rows 130 - 159
-mean_E_pH7.0 <- mean(as.numeric(cal_data[97:126,2]))#Rows 97 - 126
+mean_E_pH7.0 <- mean(as.numeric(cal_data[97:126,2])) #Rows 97 - 126
 mean_E_pH10.0 <- mean(as.numeric(cal_data[163:192,2])) #Rows 163 - 192
 
 
 # Determine y intercept and slope of best fit line
-
 buffers_E <-c(mean_E_pH4.0, mean_E_pH7.0, mean_E_pH10.0)
 
+# Run linear model of voltages and corresponding pH buffer
 model<-lm(buffers_E ~ pH_buffers)
+
+# Use coef of model to extract the best fit slope ((model)[2]) and y intercept ((model)[1]).
+# Use those values to determine voltages for pH3.5 and pH3.0
 coef(model)[2]*pH3.5_3.0+coef(model)[1]
