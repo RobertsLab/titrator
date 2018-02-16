@@ -23,3 +23,12 @@ setwd(file.path("c:/Users/", win_user, "/gitrepos/RobertsLab/titrator/data/cal_d
 
 # Operate on newly added file.
 
+
+# Determine y intercept and slope of best fit line
+
+pH_buffers <-c(4, 7, 10)
+pH3.5_3.0 <-c(3.5, 3.0)
+buffers_E <-c(168.8, -5.5, -182.2)
+
+model<-lm(buffers_E ~ pH_buffers)
+coef(model)[2]*pH3.5_3.0+coef(model)[1]
