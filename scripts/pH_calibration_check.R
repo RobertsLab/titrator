@@ -23,6 +23,8 @@ setwd(file.path("c:/Users/", win_user, "/gitrepos/RobertsLab/titrator/data/cal_d
 
 # Operate on newly added file.
 
+cal_data_file <- 'data/cal_data/example_pH_calibration.csv'
+cal_data <- read.table(cal_data_file, header = FALSE, stringsAsFactors = FALSE, fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(cal_data_file, sep = ',')) - 1)), fill = TRUE)
 
 # Determine y intercept and slope of best fit line
 
