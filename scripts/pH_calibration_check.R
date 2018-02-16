@@ -26,10 +26,13 @@ setwd(file.path("c:/Users/", win_user, "/gitrepos/RobertsLab/titrator/data/cal_d
 cal_data_file <- 'data/cal_data/example_pH_calibration.csv'
 cal_data <- read.table(cal_data_file, header = FALSE, stringsAsFactors = FALSE, fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(cal_data_file, sep = ',')) - 1)), fill = TRUE)
 
+# Set constants
+pH_buffers <-c(4, 7, 10) #Vector of pH buffers used for calibration.
+pH3.5_3.0 <-c(3.5, 3.0) #Vector of titration endpoint pH values
+
+
 # Determine y intercept and slope of best fit line
 
-pH_buffers <-c(4, 7, 10)
-pH3.5_3.0 <-c(3.5, 3.0)
 buffers_E <-c(168.8, -5.5, -182.2)
 
 model<-lm(buffers_E ~ pH_buffers)
