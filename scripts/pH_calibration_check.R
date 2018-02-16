@@ -36,15 +36,17 @@ cal_data <- read.table(cal_data_file, header = FALSE, stringsAsFactors = FALSE, 
 pH_buffers <-c(4, 7, 10) #Vector of pH buffers used for calibration.
 pH3.5_3.0 <-c(3.5, 3.0) #Vector of titration endpoint pH values
 
-# Calculate mean voltages (E) for each pH buffer
-mean_E_pH4.0
-mean_E_pH7.0
-mean_E_pH10.0
+
+# Calculate mean voltages (E) for each pH buffer; this data is in column 2
+#
+mean_E_pH4.0 <- mean(as.numeric(cal_data[130:159,2])) #Rows 130 - 159
+mean_E_pH7.0 <- mean(as.numeric(cal_data[97:126,2]))#Rows 97 - 126
+mean_E_pH10.0 <- mean(as.numeric(cal_data[163:192,2])) #Rows 163 - 192
 
 
 # Determine y intercept and slope of best fit line
 
-buffers_E <-c(168.8, -5.5, -182.2)
+buffers_E <-c(mean_E_pH4.0, mean_E_pH7.0, mean_E_pH10.0)
 
 model<-lm(buffers_E ~ pH_buffers)
 coef(model)[2]*pH3.5_3.0+coef(model)[1]
