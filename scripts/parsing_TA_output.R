@@ -88,7 +88,7 @@ sample_result_rows=tail(result_positions, tail(total_samples))
 # Last entry which selects to end of file (e.g. [row#+2:,])
 for (item in 1:length(sample_result_rows)){
   if (item == length(sample_result_rows)){
-    sample_names_list[item]<- tail(data1, (nrow(data1) - (sample_result_rows[item]+1)))
+    sample_names_list[[item]]<- tail(data1, (nrow(data1) - (sample_result_rows[item]+1)))
   }
 
 }
