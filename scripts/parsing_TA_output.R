@@ -55,7 +55,8 @@ sample_name_positions <- grep("^Scope", data1$V1)
 sample_list <- data1[sample_name_positions[1:(length(sample_name_positions)/2)], 2] 
 
 # Pulls out the actual sample names using the number of characters, minus 1 to get rid of ending ")" in cells, as the stop value for substr.
-sample_names <- substr(sample_list, 14, as.numeric(nchar(sample_list))-1)
+# Stores as a list, which will be useful for assigning data to each sample name later on.
+sample_names_list <- list(substr(sample_list, 14, as.numeric(nchar(sample_list))-1))
 
 
 ### Extracts weight from first sample
@@ -79,4 +80,15 @@ sample_weights <- as.numeric(substr(weights_with_units,1,weight_char_counts))
 
 
 result_positions <- grep("^Result", data1$V1) 
+sample_result_rows=tail(result_positions, tail(total_samples))
 
+#Outline for the following:
+# Beginning of data == row#+2
+# End of data == value at next position-1 UNLESS
+# Last entry which selects to end of file (e.g. [row#+2:,])
+for (position in sample_result_rows){
+  if ((which((sample_result_rows) == length(sample_result_rows)))){
+    sample_names_list[position]<- tail(data1, (nrow(data1) - (sample_result_rows[position]+1)))
+  }
+
+}
