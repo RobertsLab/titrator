@@ -56,12 +56,13 @@ sample_list <- data1[sample_name_positions[1:(length(sample_name_positions)/2)],
 
 # Pulls out the actual sample names using the number of characters, minus 1 to get rid of ending ")" in cells, as the stop value for substr.
 # Stores as a list, which will be useful for assigning data to each sample name later on.
-sample_names_list <- list(substr(sample_list, 14, as.numeric(nchar(sample_list))-1))
-
+sample_names <- substr(sample_list, 14, as.numeric(nchar(sample_list))-1)
+sample_names_list <- list()
+for (item in 1:length(sample_names)){
+  sample_names_list[[item]] <- sample_names[item]
+}
 
 ### Extracts weight from first sample
-
-
 
 # Pulls the weight field by searching for rows with "Sample size".
 weights_with_units <- data1[grep("^Sample size", data1$V1), 2]
@@ -105,6 +106,6 @@ for (item in 1:length(EP1_titrations_rows)){
 for (item in 1:length(EP2_titrations_rows)){
   if (item == length(EP2_titrations_rows)){
     sample_names_list[[item]]<- tail(data1, (nrow(data1) - (EP2_titrations_rows[item]+1)))
+  } else {sample_names_list[[item]]<- data1[(EP2_titrations_rows[item]+2):(EP2_titrations_rows[item+1]-1),]
   }
-
 }
