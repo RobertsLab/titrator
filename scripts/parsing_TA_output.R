@@ -92,9 +92,7 @@ for (row in 1:length(EP1_titrations_rows)){
 
 # Pull out final EP1 volumes
 for (item in 1:length(EP1_titrations_rows)){
-  if (item == length(EP1_titrations_rows)){
     EP1_Vf[[item]]<- data1[(EP2_titrations_rows[item]-1), 1]
-  }
   
 }
 
