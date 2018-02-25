@@ -79,9 +79,9 @@ sample_weights <- as.numeric(substr(weights_with_units,1,weight_char_counts))
                              
 
 # Identify rows that contain "TitrationEP1" text in column 2
-EP1_titrations <- grep("^TitrationEP1", data1$V2)
+EP1_titrations_rows <- grep("^TitrationEP1", data1$V2)
 # Identify rows that contain "TitrationEP2" text in column 2
-EP2_titrations <- grep("^TitrationEP2", data1$V2)
+EP2_titrations_rows <- grep("^TitrationEP2", data1$V2)
 
 # Pull out final EP1 volumes
 
@@ -89,9 +89,9 @@ EP2_titrations <- grep("^TitrationEP2", data1$V2)
 # Beginning of data == row#+2
 # End of data == value at next position-1 UNLESS
 # Last entry which selects to end of file (e.g. [row#+2:,])
-for (item in 1:length(EP2_titrations)){
-  if (item == length(EP2_titrations)){
-    sample_names_list[[item]]<- tail(data1, (nrow(data1) - (EP2_titrations[item]+1)))
+for (item in 1:length(EP2_titrations_rows)){
+  if (item == length(EP2_titrations_rows)){
+    sample_names_list[[item]]<- tail(data1, (nrow(data1) - (EP2_titrations_rows[item]+1)))
   }
 
 }
