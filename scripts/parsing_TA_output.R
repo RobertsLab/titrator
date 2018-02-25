@@ -83,7 +83,22 @@ EP1_titrations_rows <- grep("^TitrationEP1", data1$V2)
 # Identify rows that contain "TitrationEP2" text in column 2
 EP2_titrations_rows <- grep("^TitrationEP2", data1$V2)
 
+# Create list of endpoint 1 (EP1) titrations
+# Will be used to store EP1 final volumes
+EP1_Vf <- list()
+for (row in 1:length(EP1_titrations_rows)){
+  EP1_Vf[[row]] <- paste("EP1_Vf_", row, sep = "")
+}
+
 # Pull out final EP1 volumes
+for (item in 1:length(EP1_titrations_rows)){
+  if (item == length(EP1_titrations_rows)){
+    EP1_Vf[[item]]<- data1[(EP2_titrations_rows[item]-1), 1]
+  }
+  
+}
+
+
 
 #Outline for the following:
 # Beginning of data == row#+2
