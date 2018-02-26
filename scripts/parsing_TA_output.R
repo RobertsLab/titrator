@@ -33,7 +33,7 @@ data_file <- 'data/titration_data/example_data.csv'
 ### Read data in as csv table that handles issue of having more columns in bottom portion of file than in top portion.
 # Sets file encoding to rm weird characters
 # Sets number of columns and assigns column names (V#) based on total number of fields detected in the file.
-data1 <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(data_file, sep = ',')) - 1)), fill = TRUE)
+data1 <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, na.strings = "NaN", fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(data_file, sep = ',')) - 1)), fill = TRUE)
 
 
 
@@ -116,3 +116,9 @@ for (i in 1:length(EP1_Vf)){
   sample_names_list[[i]][1,1] <- EP1_Vf[[i]]
 }
 
+
+for (item in 1:length(sample_names_list)){
+  for (row in 2:nrow(sample_names_list[[item]])){
+      sample_names_list[[item]][row, 1] <- ((sample_names_list[[item]][row-1, 1]) + (sample_names_list[[item]][row, 1]))
+  }
+}
