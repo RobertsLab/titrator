@@ -107,6 +107,6 @@ for (item in 1:length(EP2_titrations_rows)){
   if (item == length(EP2_titrations_rows)){
     sample_names_list[[item]]<- tail(data1, (nrow(data1) - (EP2_titrations_rows[item]+1)))
   } else {
-    sample_names_list[[item]]<- data1[(EP2_titrations_rows[item]+2):(EP2_titrations_rows[item+1]-1),]
+    sample_names_list[[item]]<- data1[(EP1_titrations_rows[item]+2):(EP2_titrations_rows[item]-1),]
   }
 }
