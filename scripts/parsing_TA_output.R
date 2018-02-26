@@ -116,6 +116,10 @@ for (i in 1:length(EP1_Vf)){
   sample_names_list[[i]][1,1] <- EP1_Vf[[i]]
 }
 
+#Convert all data frames in sample_names_list to numeric
+for (i in 1:length(sample_names_list)){
+  sample_names_list[[i]] <- lapply(sample_names_list[[i]],  as.numeric)
+}
 
 for (item in 1:length(sample_names_list)){
   for (row in 2:nrow(sample_names_list[[item]])){
