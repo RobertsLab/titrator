@@ -110,3 +110,9 @@ for (item in 1:length(EP2_titrations_rows)){
     sample_names_list[[item]]<- data1[(EP2_titrations_rows[item]+2):(EP1_titrations_rows[item+1]-2),]
   }
 }
+
+# Set EP1 volumes to row one, column one of EP2 dataframes
+for (i in 1:length(EP1_Vf)){
+  sample_names_list[[i]][1,1] <- EP1_Vf[[i]]
+}
+
