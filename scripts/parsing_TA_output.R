@@ -125,7 +125,10 @@ for (item in 1:length(sample_names_list)){
 
 # Determine total acid added to each sample
 for (item in 1:length(sample_names_list)){
-  for (row in 2:nrow(sample_names_list[[item]])){
-      sample_names_list[[item]][row, 1] <- ((sample_names_list[[item]][row-1, 1]) + (sample_names_list[[item]][row, 1]))
+  total_acid_vol <- EP1_Vf[[item]]
+  for (row in 1:nrow(sample_names_list[[item]])){
+    total_acid_vol <- total_acid_vol + ((sample_names_list[[item]][row+1, 1] - sample_names_list[[item]][row, 1]))
+    sample_names_list[[item]][row, 1] <- total_acid_vol
   }
+      
 }
