@@ -94,9 +94,9 @@ for (row in 1:length(EP1_titrations_rows)){
 # Pull out final EP1 volumes
 for (item in 1:length(EP1_titrations_rows)){
     EP1_Vf[[item]]<- data1[(EP2_titrations_rows[item]-1), 1]
-  
 }
 
+EP1_Vf <- sapply(EP1_Vf, as.numeric)
 
 
 #Outline for the following:
@@ -111,16 +111,19 @@ for (item in 1:length(EP2_titrations_rows)){
   }
 }
 
+
 # Set EP1 volumes to row one, column one of EP2 dataframes
-for (i in 1:length(EP1_Vf)){
-  sample_names_list[[i]][1,1] <- EP1_Vf[[i]]
-}
+# Might be unnecessary. Uncomment if needed.
+#for (i in 1:length(EP1_Vf)){
+#   sample_names_list[[i]][1,1] <- EP1_Vf[[i]]
+#}
 
 #Convert all data frames in sample_names_list to numeric
 for (item in 1:length(sample_names_list)){
   sample_names_list[[item]] <- as.data.frame(sapply(sample_names_list[[item]], as.numeric))
 }
 
+# Determine total acid added to each sample
 for (item in 1:length(sample_names_list)){
   for (row in 2:nrow(sample_names_list[[item]])){
       sample_names_list[[item]][row, 1] <- ((sample_names_list[[item]][row-1, 1]) + (sample_names_list[[item]][row, 1]))
