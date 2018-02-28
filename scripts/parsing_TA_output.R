@@ -26,7 +26,11 @@ pH3.5 <- 200
 mol_to_umol <- 1000000
 
 # Column headers
-
+# V is volumen in mL
+# t is time in seconds
+# E is voltage in mV
+# T is temperature in C
+# dV/dT is change in voltage divided by change in temperature
 headers <- c("V", "t", "E", "T", "dV/dT")
 
 # Load file
@@ -37,9 +41,6 @@ data_file <- 'data/titration_data/example_data.csv'
 # Sets file encoding to rm weird characters
 # Sets number of columns and assigns column names (V#) based on total number of fields detected in the file.
 data1 <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, na.strings = "NaN", fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(data_file, sep = ',')) - 1)), fill = TRUE)
-
-
-
 
 
 # Pulls total sample number from Row 2, Col. 2, position 11.
@@ -65,12 +66,12 @@ for (item in 1:length(sample_names)){
   sample_names_list[[item]] <- sample_names[item]
 }
 
-### Extracts weight from first sample
+### Extract samples weights
 
 # Pulls the weight field by searching for rows with "Sample size".
 weights_with_units <- data1[grep("^Sample size", data1$V1), 2]
 
-# Ddetermines the string length by converting to characters and counting the characters.
+# Determines the string length by converting to characters and counting the characters.
 # Uses grep to search for rows in column 1 that begin with "Sample size".
 # Subtracts two from character length to account for "<space>g" at end of entry.
 weight_char_counts <- weights_with_units %>% 
@@ -81,6 +82,8 @@ weight_char_counts <- weights_with_units %>%
 # of each entry in the weights_with_units vector.
 sample_weights <- as.numeric(substr(weights_with_units,1,weight_char_counts))
                              
+
+### Parse out necessary info from two-part titration
 
 # Identify rows that contain "TitrationEP1" text in column 2
 EP1_titrations_rows <- grep("^TitrationEP1", data1$V2)
@@ -95,17 +98,21 @@ for (row in 1:length(EP1_titrations_rows)){
 }
 
 # Pull out final EP1 volumes
+# Final EP1 volumes are the row before the beginning of each EP2 titration data set; thus, subtract "1" from each EP2 titration row value
 for (item in 1:length(EP1_titrations_rows)){
     EP1_Vf[[item]]<- data1[(EP2_titrations_rows[item]-1), 1]
 }
 
+#Convert EP1_Vf values to numeric.
 EP1_Vf <- sapply(EP1_Vf, as.numeric)
 
 
-#Outline for the following:
-# Beginning of data == row#+2
-# End of data == value at next position-1 UNLESS
-# Last entry which selects to end of file (e.g. [row#+2:,])
+### Parse out EP2 data.
+
+# Beginning of data == EP2 row#+2
+# End of data == the next EP1 titration row - 2
+# UNLESS
+# Last entry - which selects to end of file (e.g. tail(data1, (nrow(data1))
 for (item in 1:length(EP2_titrations_rows)){
   if (item == length(EP2_titrations_rows)){
     sample_names_list[[item]]<- tail(data1, (nrow(data1) - (EP2_titrations_rows[item]+1)))
@@ -115,21 +122,22 @@ for (item in 1:length(EP2_titrations_rows)){
 }
 
 
-# Set EP1 volumes to row one, column one of EP2 dataframes
-# Might be unnecessary. Uncomment if needed.
-#for (i in 1:length(EP1_Vf)){
-#   sample_names_list[[i]][1,1] <- EP1_Vf[[i]]
-#}
-
-#Convert all data frames in sample_names_list to numeric
+# Convert all data frames in sample_names_list to numeric
+# Add column names (headers) to each data frame in sample_names_list list
 for (item in 1:length(sample_names_list)){
   sample_names_list[[item]] <- as.data.frame(sapply(sample_names_list[[item]], as.numeric))
   colnames(sample_names_list[[item]]) <- headers
 }
 
 
-
 # Determine total acid added to each sample
+# First, start to loop through each data frame in the sample_names_list
+# For each data frame:
+# - set acid volume
+# - calculate the acid added in the final titration
+# - while loop to:
+# -- calculate cumulative acid added at each titration point
+# - determine final cumulative acid amount and assign to last row of data frame
 for (item in 1:length(sample_names_list)){
   total_acid_vol <- EP1_Vf[[item]]
   final_acid_addition <- sample_names_list[[item]][nrow(sample_names_list[[item]]), ] - sample_names_list[[item]][(nrow(sample_names_list[[item]]) - 1), 1]
