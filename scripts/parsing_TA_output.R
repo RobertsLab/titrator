@@ -140,13 +140,13 @@ for (item in 1:length(sample_names_list)){
 # - determine final cumulative acid amount and assign to last row of data frame
 for (item in 1:length(sample_names_list)){
   total_acid_vol <- EP1_Vf[[item]]
-  final_acid_addition <- sample_names_list[[item]][nrow(sample_names_list[[item]]), ] - sample_names_list[[item]][(nrow(sample_names_list[[item]]) - 1), 1]
+  final_acid_addition <- sample_names_list[[item]][nrow(sample_names_list[[item]]), "V"] - sample_names_list[[item]][(nrow(sample_names_list[[item]]) - 1), "V"]
   row <- 1
   while (row < nrow(sample_names_list[[item]])){
-    total_acid_vol <- total_acid_vol + ((sample_names_list[[item]][row+1, 1] - sample_names_list[[item]][row, 1]))
-    sample_names_list[[item]][row, 1] <- total_acid_vol
+    total_acid_vol <- total_acid_vol + ((sample_names_list[[item]][row+1, "V"] - sample_names_list[[item]][row, "V"]))
+    sample_names_list[[item]][row, "V"] <- total_acid_vol
     row <- row + 1
   }
-  sample_names_list[[item]][nrow(sample_names_list[[item]]), 1] <- total_acid_vol + final_acid_addition
+  sample_names_list[[item]][nrow(sample_names_list[[item]]), "V"] <- total_acid_vol + final_acid_addition
 }
 
