@@ -25,6 +25,9 @@ pH3.5 <- 200
 
 mol_to_umol <- 1000000
 
+# Column headers
+
+headers <- c("V", "t", "E", "T", "dV/dT")
 
 # Load file
 data_file <- 'data/titration_data/example_data.csv'
@@ -121,12 +124,15 @@ for (item in 1:length(EP2_titrations_rows)){
 #Convert all data frames in sample_names_list to numeric
 for (item in 1:length(sample_names_list)){
   sample_names_list[[item]] <- as.data.frame(sapply(sample_names_list[[item]], as.numeric))
+  colnames(sample_names_list[[item]]) <- headers
 }
+
+
 
 # Determine total acid added to each sample
 for (item in 1:length(sample_names_list)){
   total_acid_vol <- EP1_Vf[[item]]
-  final_acid_addition <- sample_names_list[[item]][nrow(sample_names_list[[item]]), 1] - sample_names_list[[item]][(nrow(sample_names_list[[item]]) - 1), 1]
+  final_acid_addition <- sample_names_list[[item]][nrow(sample_names_list[[item]]), ] - sample_names_list[[item]][(nrow(sample_names_list[[item]]) - 1), 1]
   row <- 1
   while (row < nrow(sample_names_list[[item]])){
     total_acid_vol <- total_acid_vol + ((sample_names_list[[item]][row+1, 1] - sample_names_list[[item]][row, 1]))
