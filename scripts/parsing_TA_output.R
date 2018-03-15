@@ -5,6 +5,10 @@ library(seacarb)
 library(tidyverse)
 library(whoami)
 
+# Load file
+## Enter path to desired titration data file.
+data_file <- 'data/titration_data/example_data.csv'
+
 # Acid titrant constants
 #Batch A10
 A10_density <- 1.02449 # g/cm^3
@@ -32,9 +36,6 @@ mol_to_umol <- 1000000
 # T is temperature in C
 # dV/dT is change in voltage divided by change in temperature
 headers <- c("V", "t", "E", "T", "dV/dT")
-
-# Load file
-data_file <- 'data/titration_data/example_data.csv'
 
 
 ### Read data in as csv table that handles issue of having more columns in bottom portion of file than in top portion.
