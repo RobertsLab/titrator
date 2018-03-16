@@ -163,7 +163,7 @@ for (item in 1:length(sample_names_list)){
 # - set acid volume
 # - calculate the acid added in the final titration
 # - while loop to:
-# -- calculate cumulative acid added at each titration point
+# -- calculate cumulative acid added at each titration endpoint
 # - determine final cumulative acid amount and assign to last row of data frame
 for (item in 1:length(sample_names_list)){
   total_acid_vol <- EP1_Vf[[item]]
