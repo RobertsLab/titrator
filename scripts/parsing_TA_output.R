@@ -1,9 +1,34 @@
+##########
+# This script is designed to be run as part of the R Studio Project 'titrator.Rproj' found in the top level of this repo.
+
+# This is a script designed to parse out sea water sample titration data
+# exported from LabX 2017 (v. 8.0.0; Mettler Toledo) with the following settings:
+
+### LabX Method ###
+# - Dual endpoint titration method (see LabX_method_files folder in this repo)
+
+### Export Method ###
+# - Simple CSV format
+# - UTF-8 file encoding
+# - Raw Data
+# - Table of Measured Values
+
+
+# The outputs/products consist of the following:
+# - sample names (vector)
+# - sample weights (vector)
+# - sample data [total titration volume, time, voltage, and temperature] (list of data frames)
+
+##########
+
+
+# Uncomment the following two lines if you do not have these packages installed on your system.
 #install.packages("seacarb")
-#install.packages("whoami")
 #install.packages("tidyverse")
+
+# Load necessar libraries
 library(seacarb)
 library(tidyverse)
-library(whoami)
 
 # Load file
 ## Enter path to desired titration data file.
@@ -21,9 +46,10 @@ CRM168_salinity <- 33.481 # PSU (~g/kg)
 
 
 #Enter voltage cutoffs
-#These values are constants.
-pH3.0 <- 228.57
-pH3.5 <- 200
+#These values should be entered in based on daily pH calibration.
+# Replace the commented text in the next two lines with appropriate values.
+pH3.0 <- #voltage at pH=3.0#
+pH3.5 <- #voltage at pH=3.5#
 
 # mols to umols conversion
 
