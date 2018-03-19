@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <lance>
 	<db>
-		<date>15.03.2018 15:51.01</date>
+		<date>19.03.2018 11:09.04</date>
 		<version>0.132</version>
 		<user>SystemInternal</user>
-		<serialnumber>23</serialnumber>
+		<serialnumber>24</serialnumber>
 		<instrument>T50T90</instrument>
 		<resourcelist>
 			<record key="TA_titration" prefix="57346" type="1" mtype="2" mtitle="TA_titration">
@@ -15,7 +15,7 @@
 					<param id="2049" type="S" descr="eMfParam_Title_Title">TA_titration</param>
 					<param id="2052" type="S" descr="eMfParam_Title_Author">SystemInternal</param>
 					<param id="2053" type="D" descr="eMfParam_Title_DateTime">2218819280905490</param>
-					<param id="2054" type="D" descr="eMfParam_Title_Chanage_Date">2218827434623518</param>
+					<param id="2054" type="D" descr="eMfParam_Title_Chanage_Date">2218827669243690</param>
 					<param id="2055" type="S" descr="eMfParam_Title_Chanage_User">SystemInternal</param>
 					<param id="2060" type="I" descr="eMfParam_Title_Protection">1</param>
 					<param id="2056" type="I" descr="eMfParam_Title_SOP">0</param>
@@ -30,7 +30,7 @@
 					<param id="59398" type="I" descr="eMfParam_Sample_EntryType_id">0</param>
 					<param id="59408" type="F" descr="eMfParam_Sample_Density">1.0</param>
 					<param id="59410" type="F" descr="eMfParam_Sample_CorrectionFactor">1.0</param>
-					<param id="59401" type="F" descr="eMfParam_Sample_LowerLimit_weight">45.0</param>
+					<param id="59401" type="F" descr="eMfParam_Sample_LowerLimit_weight">50</param>
 					<param id="59404" type="F" descr="eMfParam_Sample_UpperLimit_weight">105.0</param>
 					<param id="59400" type="F" descr="eMfParam_Sample_LowerLimit_volume">0.0</param>
 					<param id="59403" type="F" descr="eMfParam_Sample_UpperLimit_volume">5.0</param>
@@ -141,5 +141,5 @@
 			</record>
 		</resourcelist>
 	</db>
-	<md5>744a08a04ad97c295000c854118e21e5</md5>
+	<md5>20dbaf242d645427a1002ed2cfa96de1</md5>
 </lance>
