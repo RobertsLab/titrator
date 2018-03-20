@@ -30,9 +30,14 @@
 library(seacarb)
 library(tidyverse)
 
+# Specify desired output filenames for each sample
+# Filenames will be appended with incremental, two-digit counter (e.g. _01) and ".csv"
+
+filenames_template <- "20180316_geoduck_titrations"
+
 # Load file
 ## Enter path to desired titration data file.
-data_file <- 'data/titration_data/example_data.csv'
+data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
 
 # Acid titrant constants
 #Batch A10
@@ -49,11 +54,11 @@ CRM168_salinity <- 33.481 # PSU (~g/kg)
 #These values should be entered in based on daily pH calibration.
 # Replace the commented text in the next two lines with appropriate values.
 pH3.0 <- #voltage at pH=3.0#
-pH3.5 <- #voltage at pH=3.5#
-
-# mols to umols conversion
-
-mol_to_umol <- 1000000
+  pH3.5 <- #voltage at pH=3.5#
+  
+  # mols to umols conversion
+  
+  mol_to_umol <- 1000000
 
 # Column headers
 # V is volumen in mL
@@ -67,7 +72,7 @@ headers <- c("V", "t", "E", "T", "dV/dT")
 ### Read data in as csv table that handles issue of having more columns in bottom portion of file than in top portion.
 # Sets file encoding to rm weird characters
 # Sets number of columns and assigns column names (V#) based on total number of fields detected in the file.
-data1 <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, na.strings = "NaN", fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(data_file, sep = ',')) - 1)), fill = TRUE)
+data1 <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, na.strings = "NaN", fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(data_file, sep = ',')))), fill = TRUE)
 
 
 # Pulls total sample number from Row 2, Col. 2, position 11.
@@ -108,7 +113,7 @@ weight_char_counts <- weights_with_units %>%
 # Removes the last two characters from the weight field (<space>g)
 # of each entry in the weights_with_units vector.
 sample_weights <- as.numeric(substr(weights_with_units,1,weight_char_counts))
-                             
+
 
 ### Parse out necessary info from two-part titration
 
@@ -127,7 +132,7 @@ for (row in 1:length(EP1_titrations_rows)){
 # Pull out final EP1 volumes
 # Final EP1 volumes are the row before the beginning of each EP2 titration data set; thus, subtract "1" from each EP2 titration row value
 for (item in 1:length(EP1_titrations_rows)){
-    EP1_Vf[[item]]<- data1[(EP2_titrations_rows[item]-1), 1]
+  EP1_Vf[[item]]<- data1[(EP2_titrations_rows[item]-1), 1]
 }
 
 #Convert EP1_Vf values to numeric.
@@ -165,6 +170,7 @@ for (item in 1:length(sample_names_list)){
 # - while loop to:
 # -- calculate cumulative acid added at each titration endpoint
 # - determine final cumulative acid amount and assign to last row of data frame
+# -- write output file for each sample to current directory
 for (item in 1:length(sample_names_list)){
   total_acid_vol <- EP1_Vf[[item]]
   final_acid_addition <- sample_names_list[[item]][nrow(sample_names_list[[item]]), "V"] - sample_names_list[[item]][(nrow(sample_names_list[[item]]) - 1), "V"]
@@ -175,5 +181,6 @@ for (item in 1:length(sample_names_list)){
     row <- row + 1
   }
   sample_names_list[[item]][nrow(sample_names_list[[item]]), "V"] <- total_acid_vol + final_acid_addition
+  write.csv(sample_names_list[[item]], paste0(filenames_template, "_0", item, ".csv"), row.names=FALSE)
 }
 
