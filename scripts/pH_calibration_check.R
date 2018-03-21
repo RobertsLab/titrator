@@ -4,12 +4,12 @@ library(tools)
 # Enter path to desired file inside single quotations below.
 cal_data_file <- ''
 
+# Remove path and extension of cal_data_file
+cal_file_no_path <- basename((cal_data_file))
+
 # Extract calibration date.
 # Uses substring to parse out original data format, followed by gsub to remove dashes.
 cal_date <- gsub('-', '', substr(cal_file_no_path, 1, 10))
-
-# Remove path and extension of cal_data_file
-cal_file_no_path <- basename((cal_data_file))
 
 ### Read data in as csv table that handles issue of having more columns in bottom portion of file than in top portion.
 # Sets file encoding to rm weird characters
