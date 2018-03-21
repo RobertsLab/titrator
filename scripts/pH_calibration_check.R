@@ -1,5 +1,6 @@
-### Load filename for downstream use
-cal_data_file <- '2018-03-16T10_19_31_pH_calibration_7_4_10_T303.csv'
+### Load filename for downstream use.
+# Enter path to desired file inside single quotations below.
+cal_data_file <- ''
 
 # Extract calibration date.
 # Uses substring to parse out original data format, followed by gsub to remove dashes.
