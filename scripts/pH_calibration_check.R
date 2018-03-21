@@ -15,12 +15,6 @@ cal_task <- substr(cal_data_file, 43, as.numeric(nchar(cal_data_file) - 4))
 cal_data <- read.table(cal_data_file, header = FALSE, stringsAsFactors = FALSE, fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(cal_data_file, sep = ',')) - 1)), fill = TRUE)
 
 ### Set constants
-## headers
-# t = time (s)
-# E = voltage (mV)
-# T = temperature (C)
-pH_data_headers <- c("t", "E", "T")
-
 pH_buffers <-c(4, 7, 10) #Vector of pH buffers used for calibration.
 pH3.5_3.0 <-c(3.5, 3.0) #Vector of titration endpoint pH values
 
