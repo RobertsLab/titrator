@@ -1,19 +1,22 @@
+library(tools)
+
 ### Load filename for downstream use.
 # Enter path to desired file inside single quotations below.
 cal_data_file <- ''
 
 # Extract calibration date.
 # Uses substring to parse out original data format, followed by gsub to remove dashes.
-cal_date <- gsub('-', '', substr(cal_data_file, 1, 10))
+cal_date <- gsub('-', '', substr(cal_file_no_path, 1, 10))
 
-# Extract LabX task ID value from filename.
-cal_task <- substr(cal_data_file, 43, as.numeric(nchar(cal_data_file) - 4))
-
+# Remove path and extension of cal_data_file
+cal_file_no_path <- basename((cal_data_file))
 
 ### Read data in as csv table that handles issue of having more columns in bottom portion of file than in top portion.
 # Sets file encoding to rm weird characters
 # Sets number of columns and assigns column names (V#) based on total number of fields detected in the file.
 cal_data <- read.table(cal_data_file, header = FALSE, stringsAsFactors = FALSE, fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(cal_data_file, sep = ',')) - 1)), fill = TRUE)
+daily_log <- read.csv(file = "data/cal_data/daily_calibration_log.csv")
+
 
 ### Set constants
 pH_buffers <-c(4, 7, 10) #Vector of pH buffers used for calibration.
@@ -35,3 +38,7 @@ model<-lm(buffers_mean_E ~ pH_buffers)
 # Use coef of model to extract the best fit slope ((model)[2]) and y intercept ((model)[1]).
 # Use those values (voltages in mV = E) to determine voltages for pH3.5 & pH3.0
 E_pH3.5_3.0 <- coef(model)[2]*pH3.5_3.0+coef(model)[1]
+
+### Record daily pH calibration data
+# Use write.table to append a transposed (t) vector of data in the desired order to the daily calibration log file.
+write.table(t(c(cal_date, E_pH3.5_3.0, cal_file_no_path)), file = "data/cal_data/daily_calibration_log.csv", append = TRUE, sep = ",", row.names = FALSE, col.names = FALSE, quote = FALSE)
