@@ -2,7 +2,7 @@ library(tools)
 
 ### Load filename for downstream use.
 # Enter path to desired file inside single quotations below.
-cal_data_file <- ''
+cal_data_file <- 'data/cal_data/2018-03-20T07_27_30_pH_calibration_7_4_10_T324.csv'
 
 # Remove path and extension of cal_data_file
 cal_file_no_path <- basename((cal_data_file))
@@ -24,9 +24,9 @@ pH3.5_3.0 <-c(3.5, 3.0) #Vector of titration endpoint pH values
 
 
 ### Calculate mean voltages (E) for each pH buffer; this data is in column 2
-mean_E_pH4.0 <- mean(as.numeric(cal_data[202:231,2]))
-mean_E_pH7.0 <- mean(as.numeric(cal_data[169:198,2]))
-mean_E_pH10.0 <- mean(as.numeric(cal_data[235:264,2]))
+mean_E_pH4.0 <- round(mean(as.numeric(cal_data[202:231,2])), digits = 1)
+mean_E_pH7.0 <- round(mean(as.numeric(cal_data[169:198,2])), digits = 1)
+mean_E_pH10.0 <- round(mean(as.numeric(cal_data[235:264,2])), digits = 1)
 
 ### Determine y intercept and slope of best fit line
 # Calculate mean voltages (E) of each buffer
