@@ -23,7 +23,8 @@ setwd("c:/Users/sam/Downloads/")
 
 # Acid titrant constants
 #Batch A10
-A10_density <- 1.02449 #g/cm^3
+A10_density <- function(temperature) {
+  1.02882 - (0.0001067*temperature) - (0.0000041*(temperature)^2)
 A10_concentration <- 0.100215 #mol/kg
 
 
