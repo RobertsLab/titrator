@@ -25,6 +25,7 @@ setwd("c:/Users/sam/Downloads/")
 #Batch A10
 A10_density <- function(temperature) {
   1.02882 - (0.0001067*temperature) - (0.0000041*(temperature)^2)
+}
 A10_concentration <- 0.100215 #mol/kg
 
 
