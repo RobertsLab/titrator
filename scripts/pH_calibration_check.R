@@ -2,7 +2,7 @@ library(tools)
 
 ### Load filename for downstream use.
 # Enter path to desired file inside single quotations below.
-cal_data_file <- 'data/cal_data/2018-03-20T07_27_30_pH_calibration_7_4_10_T324.csv'
+cal_data_file <- 'data/cal_data/2018-03-05T08_55_48_pH_calibration_7_4_10_T280.csv'
 
 # Remove path and extension of cal_data_file
 cal_file_no_path <- basename((cal_data_file))
@@ -37,7 +37,7 @@ model<-lm(buffers_mean_E ~ pH_buffers)
 
 # Use coef of model to extract the best fit slope ((model)[2]) and y intercept ((model)[1]).
 # Use those values (voltages in mV = E) to determine voltages for pH3.5 & pH3.0
-E_pH3.5_3.0 <- coef(model)[2]*pH3.5_3.0+coef(model)[1]
+E_pH3.5_3.0 <- round(coef(model)[2]*pH3.5_3.0+coef(model)[1], digits = 1)
 
 ### Record daily pH calibration data
 # Use write.table to append a transposed (t) vector of data in the desired order to the daily calibration log file.
