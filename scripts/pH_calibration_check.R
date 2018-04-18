@@ -29,10 +29,9 @@ data_positions <- grep("^Measurenormal1", cal_data$V2)
 
 E_measurements_list <- list()
 mean_E_list <- list()
+
+
 ### Calculate mean voltages (E) for each pH buffer; this data is in column 2
-mean_E_pH4.0 <- round(mean(as.numeric(cal_data[202:231,2])), digits = 1)
-mean_E_pH7.0 <- round(mean(as.numeric(cal_data[169:198,2])), digits = 1)
-mean_E_pH10.0 <- round(mean(as.numeric(cal_data[235:264,2])), digits = 1)
 
 
 for (item in 1:length(data_positions)){
@@ -49,11 +48,10 @@ E_measurements_list <- lapply(E_measurements_list, lapply, as.numeric) %>%
 mean_E_list <- mapply(function(x) mean(x$V2), E_measurements_list)
 
 ### Determine y intercept and slope of best fit line
-# Calculate mean voltages (E) of each buffer
-buffers_mean_E <-c(mean_E_pH4.0, mean_E_pH7.0, mean_E_pH10.0)
+
 
 # Run linear model of voltages and corresponding pH buffer
-model<-lm(buffers_mean_E ~ pH_buffers)
+model<-lm(mean_E_list ~ pH_buffers)
 
 # Use coef of model to extract the best fit slope ((model)[2]) and y intercept ((model)[1]).
 # Use those values (voltages in mV = E) to determine voltages for pH3.5 & pH3.0
