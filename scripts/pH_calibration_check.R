@@ -2,7 +2,7 @@ library(tools)
 
 ### Load filename for downstream use.
 # Enter path to desired file inside single quotations below.
-cal_data_file <- 'data/cal_data/2018-03-05T08_55_48_pH_calibration_7_4_10_T280.csv'
+cal_data_file <- 'data/cal_data/2018-04-03T07_17_55_pH_calibration_7_4_10_T350.csv'
 
 # Remove path and extension of cal_data_file
 cal_file_no_path <- basename((cal_data_file))
@@ -22,11 +22,27 @@ daily_log <- read.csv(file = "data/cal_data/daily_calibration_log.csv")
 pH_buffers <-c(4, 7, 10) #Vector of pH buffers used for calibration.
 pH3.5_3.0 <-c(3.5, 3.0) #Vector of titration endpoint pH values
 
+## Pull row numbers for beginnings of each data collection
+
+data_positions <- grep("^Measurenormal1", cal_data$V2) 
+
+E_measurements_list <- list()
 
 ### Calculate mean voltages (E) for each pH buffer; this data is in column 2
 mean_E_pH4.0 <- round(mean(as.numeric(cal_data[202:231,2])), digits = 1)
 mean_E_pH7.0 <- round(mean(as.numeric(cal_data[169:198,2])), digits = 1)
 mean_E_pH10.0 <- round(mean(as.numeric(cal_data[235:264,2])), digits = 1)
+
+
+for (item in 1:length(data_positions)){
+  if (item == length(data_positions)){
+    E_measurements_list[[item]]<- tail(cal_data, (nrow(cal_data) - (data_positions[item]+1)))
+  } else {
+    E_measurements_list[[item]]<- cal_data[(data_positions[item]+2):(data_positions[item+1]-2),]
+  }
+}
+
+mean_E_list <- 
 
 ### Determine y intercept and slope of best fit line
 # Calculate mean voltages (E) of each buffer
