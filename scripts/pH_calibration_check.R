@@ -3,7 +3,7 @@ library(tidyverse)
 
 ### Load filename for downstream use.
 # Enter path to desired file inside single quotations below.
-cal_data_file <- 'data/cal_data/2018-04-03T07_17_55_pH_calibration_7_4_10_T350.csv'
+cal_data_file <- 'data/cal_data/'
 
 # Remove path and extension of cal_data_file
 cal_file_no_path <- basename((cal_data_file))
