@@ -1,3 +1,24 @@
+##########
+# This script is designed to be run as part of the R Studio Project 'titrator.Rproj' found in the top level of this repo.
+
+# This is a script designed to parse out pH calibration data and calculate voltages of pH3.5 and pH3.0 from data
+# exported from LabX 2017 (v. 8.0.0; Mettler Toledo), with the following settings:
+
+### LabX Method ###
+# - pH_calibration_7_4_10 (see LabX_method_files folder in this repo)
+
+### Export Method ###
+# - Simple CSV format
+# - UTF-8 file encoding
+# - Raw Data
+# - Table of Measured Values
+
+
+# The outputs/products consist of the following:
+# - append date, voltages for pH3.5 and pH3.0, and source filename to daily_calibration_log.csv
+
+##########
+
 library(tools)
 library(tidyverse)
 
