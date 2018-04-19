@@ -30,35 +30,9 @@
 library(seacarb)
 library(tidyverse)
 
-# Specify desired output filenames for each sample
-# Filenames will be appended with incremental, two-digit counter (e.g. _01) and ".csv"
-
-filenames_template <- "20180316_geoduck_titrations"
-
 # Load file
 ## Enter path to desired titration data file.
 data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
-
-# Acid titrant constants
-#Batch A10
-A10_density <- 1.02449 # g/cm^3
-A10_concentration <- 0.100215 # mol/kg
-
-# CRM constants
-#Batch 168
-CRM168_TA <- 2207.62 # umol/kg
-CRM168_salinity <- 33.481 # PSU (~g/kg)
-
-
-#Enter voltage cutoffs
-#These values should be entered in based on daily pH calibration.
-# Replace the commented text in the next two lines with appropriate values.
-pH3.0 <- #voltage at pH=3.0#
-  pH3.5 <- #voltage at pH=3.5#
-  
-  # mols to umols conversion
-  
-  mol_to_umol <- 1000000
 
 # Column headers
 # V is volumen in mL
@@ -181,6 +155,5 @@ for (item in 1:length(sample_names_list)){
     row <- row + 1
   }
   sample_names_list[[item]][nrow(sample_names_list[[item]]), "V"] <- total_acid_vol + final_acid_addition
-  write.csv(sample_names_list[[item]], paste0(filenames_template, "_0", item, ".csv"), row.names=FALSE)
 }
 
