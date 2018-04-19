@@ -1,6 +1,5 @@
 date,mean_E_pH3.5(mV),mean_E_pH3.0(mV),source_filename
 20180305,196.1,225.2,2018-03-05T08_55_48_pH_calibration_7_4_10_T280.csv
-20180314,201,230.4,2018-03-14T09_38_16_pH_calibration_7_4_10_T299.csv
 20180315,195.8,225,2018-03-15T07_53_10_pH_calibration_7_4_10_T301.csv
 20180316,195.5,224.6,2018-03-16T10_19_31_pH_calibration_7_4_10_T303.csv
 20180319,195.5,224.6,2018-03-19T08_20_01_pH_calibration_7_4_10_T319.csv
