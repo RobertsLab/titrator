@@ -20,7 +20,7 @@ daily_log <- read.csv(file = "data/cal_data/daily_calibration_log.csv")
 
 
 ### Set constants
-pH_buffers <-c(4, 7, 10) #Vector of pH buffers used for calibration.
+pH_buffers <-c(7, 4, 10) #Vector of pH buffers used for calibration.
 pH3.5_3.0 <-c(3.5, 3.0) #Vector of titration endpoint pH values
 
 ## Pull row numbers for beginnings of each data collection
