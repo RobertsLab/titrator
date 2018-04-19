@@ -23,17 +23,21 @@ daily_log <- read.csv(file = "data/cal_data/daily_calibration_log.csv")
 pH_buffers <-c(7, 4, 10) #Vector of pH buffers used for calibration.
 pH3.5_3.0 <-c(3.5, 3.0) #Vector of titration endpoint pH values
 
-## Pull row numbers for beginnings of each data collection
-
-data_positions <- grep("^Measurenormal1", cal_data$V2) 
-
+## Initialize variables
 E_measurements_list <- list()
 mean_E_list <- list()
+
+## Pull row numbers for beginnings of each data collection
+### Searches in column 2 for rows that begin with "Measurenormal1" - this is where data collection begins for each pH buffer.
+data_positions <- grep("^Measurenormal1", cal_data$V2) 
+
+
 
 
 ### Calculate mean voltages (E) for each pH buffer; this data is in column 2
 
-
+#### Loops through each item in data positions
+#### Pulls all data points and adds them to current index of E_measurements_list
 for (item in 1:length(data_positions)){
   if (item == length(data_positions)){
     E_measurements_list[[item]]<- tail(cal_data, (nrow(cal_data) - (data_positions[item]+1)))
@@ -42,13 +46,18 @@ for (item in 1:length(data_positions)){
   }
 }
 
+#### Uses nested lapply() to convert data to numeric values
+#### Then extracts just column two data.
 E_measurements_list <- lapply(E_measurements_list, lapply, as.numeric) %>% 
   lapply("[", 2)
-  
+
+
+#### Calculates mean of each list element.
+#### Saves as numeric vector
 mean_E_list <- mapply(function(x) mean(x$V2), E_measurements_list)
 
-### Determine y intercept and slope of best fit line
 
+### Determine y intercept and slope of best fit line
 
 # Run linear model of voltages and corresponding pH buffer
 model<-lm(mean_E_list ~ pH_buffers)
