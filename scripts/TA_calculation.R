@@ -166,25 +166,7 @@ for (item in 1:length(sample_names_list)){
 }
 
 
-# Sample mass (grams)
-mass1 <- 50.001
-mass2 <- 50.0118
-mass3 <- 50.0011
-mass4 <- 
-mass5 <- 
-mass6 <- 
-mass7
-mass8
 
-#Read files
-data1 <- read_csv(file = "20180206_IO01_bubbling.csv")
-data2 <- read.csv(file = "20180206_IO02_bubbling.csv")
-data3 <- read.csv(file = "20180206_IO03_bubbling.csv")
-data4 <- read.csv(file = "")
-data5 <- read.csv(file = "")
-data6 <- read.csv(file = "")
-data7 <- read.csv(file = "")
-data8 <- read.csv(file = "")
 
 # Use dplyr library to filter data for use in seacarb library:
 # temperature data (T) and convert to vector (.$T)
