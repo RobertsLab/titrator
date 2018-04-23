@@ -48,7 +48,7 @@ data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
 # E is voltage in mV
 # T is temperature in C
 # dV/dT is change in voltage divided by change in temperature
-headers <- c("V", "t", "E", "T", "dV/dT")
+headers <- c("V", "t", "E", "T", "dV/dT", "S", "weight")
 
 
 ### Read data in as csv table that handles issue of having more columns in bottom portion of file than in top portion.
