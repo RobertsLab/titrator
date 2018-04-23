@@ -139,6 +139,8 @@ for (item in 1:length(EP2_titrations_rows)){
 # Convert all data frames in sample_names_list to numeric
 # Add column names (headers) to each data frame in sample_names_list list
 for (item in 1:length(sample_names_list)){
+  sample_names_list[[item]]$S <- salinities[item]
+  sample_names_list[[item]]$weight <- sample_weights[item]
   sample_names_list[[item]] <- as.data.frame(sapply(sample_names_list[[item]], as.numeric))
   colnames(sample_names_list[[item]]) <- headers
 }
