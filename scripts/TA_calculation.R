@@ -42,6 +42,8 @@ mol_to_umol <- 1000000
 ## Enter path to desired titration data file.
 data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
 
+data_date <- data_file %>% basename() %>% substr(1, 10) %>% gsub("-", "", .)
+
 # Column headers
 # V is volumen in mL
 # t is time in seconds
