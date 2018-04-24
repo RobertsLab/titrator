@@ -1,6 +1,10 @@
 ##########
 # This script is designed to be run as part of the R Studio Project 'titrator.Rproj' found in the top level of this repo.
 
+# It requires the file:
+
+# - daily_calibration_log.csv
+
 # This is a script designed to parse out sea water sample titration data
 # exported from LabX 2017 (v. 8.0.0; Mettler Toledo) with the following settings:
 
