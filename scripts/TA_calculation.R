@@ -29,11 +29,11 @@ library(tidyverse)
 
 # Load file
 ## Enter path to desired titration data file.
-data_file <- 'data/titration_data/sample_data/2018-04-03T09_12_45_pH_TA_titration_T363.csv'
+data_file <- ''
 
 # Vector of salinity values (UNITS NEEDED)
 ### Manually enter a comma separated list of values which match the order of the samples in data_file
-salinities <- c(33.481, 35.0, 33.68, 33.723, 33.99, 34.09)
+salinities <- c()
 
 
 
