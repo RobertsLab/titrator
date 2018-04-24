@@ -25,7 +25,7 @@ library(tidyverse)
 
 # Load file
 ## Enter path to desired titration data file.
-data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
+data_file <- 'data/titration_data/sample_data/2018-04-03T09_12_45_pH_TA_titration_T363.csv'
 
 # Vector of salinity values (UNITS NEEDED)
 ### Manually enter a comma separated list of values which match the order of the samples in data_file
@@ -77,36 +77,38 @@ headers <- c("V", "t", "E", "T", "dV/dT", "S", "weight")
 ### Read data in as csv table that handles issue of having more columns in bottom portion of file than in top portion.
 # Sets file encoding to rm weird characters
 # Sets number of columns and assigns column names (V#) based on total number of fields detected in the file.
-data1 <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, na.strings = "NaN", fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(data_file, sep = ',')))), fill = TRUE)
+sample_data <- read.table(data_file, header = FALSE, stringsAsFactors = FALSE, na.strings = "NaN", fileEncoding="UTF-8-BOM", sep = ",", col.names = paste0("V",seq_len(max(count.fields(data_file, sep = ',')))), fill = TRUE)
 
+# Remove last two columns
+sample_data <- sample_data[, -c(6,7)]
 
 # Pulls total sample number from Row 2, Col. 2, position 11.
 # Converts from string to number.
 # Data export must be Raw Data & Total Measured Values.
-total_samples <- as.numeric(data1[2,2] %>% substr(11,11))
+total_samples <- as.numeric(sample_data[2,2] %>% substr(11,11))
 
 
 ### Extract sample names
 
 # Identifies rows starting with "Scope" in column 1
-sample_name_positions <- grep("^Scope", data1$V1) 
+sample_name_positions <- grep("^Scope", sample_data$V1) 
 
 # Subsets the entire data set based on a subset of sample_name_positions.
 # Uses the length of the sample_name_positions vector divide by two because there are two entries per sample in the dataset.
-sample_list <- data1[sample_name_positions[1:(length(sample_name_positions)/2)], 2] 
+sample_list <- sample_data[sample_name_positions[1:(length(sample_name_positions)/2)], 2] 
 
 # Pulls out the actual sample names using the number of characters, minus 1 to get rid of ending ")" in cells, as the stop value for substr.
 # Stores as a list, which will be useful for assigning data to each sample name later on.
 sample_names <- substr(sample_list, 14, as.numeric(nchar(sample_list))-1)
-sample_names_list <- list()
-for (item in 1:length(sample_names)){
-  sample_names_list[[item]] <- sample_names[item]
-}
+
+# Initialize list for storing sample data.
+sample_data_list <- list()
+
 
 ### Extract samples weights
 
 # Pulls the weight field by searching for rows with "Sample size".
-weights_with_units <- data1[grep("^Sample size", data1$V1), 2]
+weights_with_units <- sample_data[grep("^Sample size", sample_data$V1), 2]
 
 # Determines the string length by converting to characters and counting the characters.
 # Uses grep to search for rows in column 1 that begin with "Sample size".
@@ -123,9 +125,9 @@ sample_weights <- as.numeric(substr(weights_with_units,1,weight_char_counts))
 ### Parse out necessary info from two-part titration
 
 # Identify rows that contain "TitrationEP1" text in column 2
-EP1_titrations_rows <- grep("^TitrationEP1", data1$V2)
+EP1_titrations_rows <- grep("^TitrationEP1", sample_data$V2)
 # Identify rows that contain "TitrationEP2" text in column 2
-EP2_titrations_rows <- grep("^TitrationEP2", data1$V2)
+EP2_titrations_rows <- grep("^TitrationEP2", sample_data$V2)
 
 # Create list of endpoint 1 (EP1) titrations
 # Will be used to store EP1 final volumes
@@ -137,7 +139,7 @@ for (row in 1:length(EP1_titrations_rows)){
 # Pull out final EP1 volumes
 # Final EP1 volumes are the row before the beginning of each EP2 titration data set; thus, subtract "1" from each EP2 titration row value
 for (item in 1:length(EP1_titrations_rows)){
-  EP1_Vf[[item]]<- data1[(EP2_titrations_rows[item]-1), 1]
+  EP1_Vf[[item]]<- sample_data[(EP2_titrations_rows[item]-1), 1]
 }
 
 #Convert EP1_Vf values to numeric.
@@ -149,28 +151,28 @@ EP1_Vf <- sapply(EP1_Vf, as.numeric)
 # Beginning of data == EP2 row#+2
 # End of data == the next EP1 titration row - 2
 # UNLESS
-# Last entry - which selects to end of file (e.g. tail(data1, (nrow(data1))
+# Last entry - which selects to end of file (e.g. tail(sample_data, (nrow(sample_data))
 for (item in 1:length(EP2_titrations_rows)){
   if (item == length(EP2_titrations_rows)){
-    sample_names_list[[item]]<- tail(data1, (nrow(data1) - (EP2_titrations_rows[item]+1)))
+    sample_data_list[[item]]<- tail(sample_data, (nrow(sample_data) - (EP2_titrations_rows[item]+1)))
   } else {
-    sample_names_list[[item]]<- data1[(EP2_titrations_rows[item]+2):(EP1_titrations_rows[item+1]-2),]
+    sample_data_list[[item]]<- sample_data[(EP2_titrations_rows[item]+2):(EP1_titrations_rows[item+1]-2),]
   }
 }
 
 
-# Convert all data frames in sample_names_list to numeric
-# Add column names (headers) to each data frame in sample_names_list list
-for (item in 1:length(sample_names_list)){
-  sample_names_list[[item]]$S <- salinities[item]
-  sample_names_list[[item]]$weight <- sample_weights[item]
-  sample_names_list[[item]] <- as.data.frame(sapply(sample_names_list[[item]], as.numeric))
-  colnames(sample_names_list[[item]]) <- headers
+# Convert all data frames in sample_data_list to numeric
+# Add column names (headers) to each data frame in sample_data_list list
+for (item in 1:length(sample_data_list)){
+  sample_data_list[[item]]$S <- salinities[item]
+  sample_data_list[[item]]$weight <- sample_weights[item]
+  sample_data_list[[item]] <- as.data.frame(sapply(sample_data_list[[item]], as.numeric))
+  colnames(sample_data_list[[item]]) <- headers
 }
 
 
 # Determine total acid added to each sample
-# First, start to loop through each data frame in the sample_names_list
+# First, start to loop through each data frame in the sample_data_list
 # For each data frame:
 # - set acid volume
 # - calculate the acid added in the final titration
@@ -178,16 +180,16 @@ for (item in 1:length(sample_names_list)){
 # -- calculate cumulative acid added at each titration endpoint
 # - determine final cumulative acid amount and assign to last row of data frame
 # -- write output file for each sample to current directory
-for (item in 1:length(sample_names_list)){
+for (item in 1:length(sample_data_list)){
   total_acid_vol <- EP1_Vf[[item]]
-  final_acid_addition <- sample_names_list[[item]][nrow(sample_names_list[[item]]), "V"] - sample_names_list[[item]][(nrow(sample_names_list[[item]]) - 1), "V"]
+  final_acid_addition <- sample_data_list[[item]][nrow(sample_data_list[[item]]), "V"] - sample_data_list[[item]][(nrow(sample_data_list[[item]]) - 1), "V"]
   row <- 1
-  while (row < nrow(sample_names_list[[item]])){
-    total_acid_vol <- total_acid_vol + ((sample_names_list[[item]][row+1, "V"] - sample_names_list[[item]][row, "V"]))
-    sample_names_list[[item]][row, "V"] <- total_acid_vol
+  while (row < nrow(sample_data_list[[item]])){
+    total_acid_vol <- total_acid_vol + ((sample_data_list[[item]][row+1, "V"] - sample_data_list[[item]][row, "V"]))
+    sample_data_list[[item]][row, "V"] <- total_acid_vol
     row <- row + 1
   }
-  sample_names_list[[item]][nrow(sample_names_list[[item]]), "V"] <- total_acid_vol + final_acid_addition
+  sample_data_list[[item]][nrow(sample_data_list[[item]]), "V"] <- total_acid_vol + final_acid_addition
 }
 
 
@@ -207,10 +209,10 @@ TA_calcs <- function(df, salinities, sample_weights) {
 
 # Creates a numeric vector.
 # Uses mapply() function to run the the TA_calcs() function, while supplying:
-# - a list of dataframes (sample_names_list)
+# - a list of dataframes (sample_data_list)
 # - a vector of salinites (salinities)
 # - a vector of sample weights (sample_weights)
-TA_values <- mapply(TA_calcs, sample_names_list, salinities, sample_weights)
+TA_values <- mapply(TA_calcs, sample_data_list, salinities, sample_weights)
 
 # Creates a two column data frame.
 TA_df <- data.frame(sample_names, TA_values)
