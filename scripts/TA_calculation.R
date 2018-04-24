@@ -61,6 +61,8 @@ mol_to_umol <- 1000000
 # E is voltage in mV
 # T is temperature in C
 # dV/dT is change in voltage divided by change in temperature
+# S is salinity in UNITS NEEDED
+# weight is weight in grams
 headers <- c("V", "t", "E", "T", "dV/dT", "S", "weight")
 
 
