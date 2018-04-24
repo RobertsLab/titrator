@@ -1,27 +1,34 @@
-###############
-# THIS IS INCOMPLETE
-# USABLE, BUT POOR - REQUIRES DATA GROOMING BY HAND
-#
-#
-#
-###############
+##########
+# This script is designed to be run as part of the R Studio Project 'titrator.Rproj' found in the top level of this repo.
 
-#install.packages("seacarb")
-#install.packages("tidyverse")
+# This is a script designed to parse out sea water sample titration data
+# exported from LabX 2017 (v. 8.0.0; Mettler Toledo) with the following settings:
+
+### LabX Method ###
+# - Dual endpoint titration method (see LabX_method_files folder in this repo)
+
+### Export Method ###
+# - Simple CSV format
+# - UTF-8 file encoding
+# - Raw Data
+# - Table of Measured Values
 
 
+# The output/product consists of the following:
+# - A two column data frame with sample names and corresponding total alkalinty values (calculated using the seacarb library at() function)
 
+##########
+
+# Load necessary libraries
 library(seacarb)
 library(tidyverse)
 
-
-
 # Load file
 ## Enter path to desired titration data file.
-# data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
+data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
 
 # Vector of salinity values (UNITS NEEDED)
-### Manuall enter a comma separated list of values which match the order of the samples in data_file
+### Manually enter a comma separated list of values which match the order of the samples in data_file
 salinities <- c(33.481, 35.0, 33.68, 33.723, 33.99, 34.09)
 
 
@@ -37,8 +44,9 @@ calibration_daily_log <- read.csv(file = "data/cal_data/daily_calibration_log.cs
 
 
 
-# Acid titrant constants
-#Batch A10
+# Acid titrant density function.
+# Requires sample temperature.
+# Batch A10 density function - provided with titrant documentation
 A10_density <- function(temperature) {
   1.02882 - (0.0001067*temperature) - (0.0000041*(temperature)^2)
 }
@@ -184,11 +192,12 @@ for (item in 1:length(sample_names_list)){
 
 
 
-
-# Use dplyr library to filter data for use in seacarb library:
+# Creates function that accepts a data frame, salinity values, and sample weights.
+# Uses dplyr library to filter data for use in seacarb library:
 # temperature data (T) and convert to vector (.$T)
 # potential data (T) and convert to vector (.$E)
 # volume data (V) and convert to vector (.$V)
+# Pass data to seacarb library at() function.
 TA_calcs <- function(df, salinities, sample_weights) {
   T_data <- df %>% filter(E <= pH3.0 & E >= pH3.5) %>% select(T) %>% .$T
   E_data <- df %>% filter(E <= pH3.0 & E >= pH3.5) %>% select(E) %>% .$E
@@ -196,6 +205,12 @@ TA_calcs <- function(df, salinities, sample_weights) {
   mol_to_umol*(at(S=salinities, T=T_data, C=A10_concentration, d=A10_density(mean(T_data)), weight=sample_weights, E=E_data, volume=volume_data))
 }
 
-
+# Creates a numeric vector.
+# Uses mapply() function to run the the TA_calcs() function, while supplying:
+# - a list of dataframes (sample_names_list)
+# - a vector of salinites (salinities)
+# - a vector of sample weights (sample_weights)
 TA_values <- mapply(TA_calcs, sample_names_list, salinities, sample_weights)
+
+# Creates a two column data frame.
 TA_df <- data.frame(sample_names, TA_values)
