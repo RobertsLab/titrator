@@ -184,4 +184,5 @@ TA_calcs <- function(df, salinities, sample_weights) {
 }
 
 
-mapply(TA_calcs, sample_names_list, salinities, sample_weights)
+TA_values <- mapply(TA_calcs, sample_names_list, salinities, sample_weights)
+TA_df <- data.frame(sample_names, TA_values)
