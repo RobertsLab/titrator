@@ -18,7 +18,7 @@ library(tidyverse)
 
 # Load file
 ## Enter path to desired titration data file.
-data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
+# data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
 
 # Vector of salinity values (UNITS NEEDED)
 ### Manuall enter a comma separated list of values which match the order of the samples in data_file
@@ -28,7 +28,12 @@ salinities <- c(33.481, 35.0, 33.68, 33.723, 33.99, 34.09)
 
 # Extract date from filename
 ## Format: yyyymmdd
-data_date <- data_file %>% basename() %>% substr(1, 10) %>% gsub("-", "", .)
+data_date <- data_file %>% basename() %>% substr(1, 10) %>% gsub("-", "", .) %>% as.numeric()
+
+# Load calibration log file
+calibration_daily_log <- read.csv(file = "data/cal_data/daily_calibration_log.csv")
+
+
 
 
 
@@ -40,10 +45,10 @@ A10_density <- function(temperature) {
 A10_concentration <- 0.100215 #mol/kg
 
 
-#Enter voltage cutoffs
-#These values are constants.
-pH3.0 <- 228.57
-pH3.5 <- 200
+# Extract calibration voltages, based on sample data file run date.
+pH3.0 <- calibration_daily_log %>% filter(date == data_date) %>% select(mean_E_pH3.0.mV.) %>% .[1,1]
+pH3.5 <- calibration_daily_log %>% filter(date == data_date) %>% select(mean_E_pH3.5.mV.) %>% .[1,1]
+
 
 # mols to umols conversion
 
