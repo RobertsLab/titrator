@@ -7,19 +7,30 @@
 ###############
 
 #install.packages("seacarb")
-#install.packages("XLConnect")
-#install.packages("XLConnectJars")
 #install.packages("tidyverse")
 
 
 
 library(seacarb)
-library(XLConnect)
 library(tidyverse)
 
-# Set working directory.
-# Will need to be altered based on user and computing operating system.
-setwd("c:/Users/sam/Downloads/")
+
+
+# Load file
+## Enter path to desired titration data file.
+data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
+
+# Vector of salinity values (UNITS NEEDED)
+### Manuall enter a comma separated list of values which match the order of the samples in data_file
+salinities <- c(33.481, 35.0, 33.68, 33.723, 33.99, 34.09)
+
+
+
+# Extract date from filename
+## Format: yyyymmdd
+data_date <- data_file %>% basename() %>% substr(1, 10) %>% gsub("-", "", .)
+
+
 
 # Acid titrant constants
 #Batch A10
@@ -38,11 +49,6 @@ pH3.5 <- 200
 
 mol_to_umol <- 1000000
 
-# Load file
-## Enter path to desired titration data file.
-data_file <- '2018-03-16T12_55_28_TA_titration_T306.csv'
-
-data_date <- data_file %>% basename() %>% substr(1, 10) %>% gsub("-", "", .)
 
 # Column headers
 # V is volumen in mL
@@ -170,7 +176,7 @@ for (item in 1:length(sample_names_list)){
 }
 
 
-salinities <- c(33.481, 35.0, 33.68, 33.723, 33.99, 34.09)
+
 
 # Use dplyr library to filter data for use in seacarb library:
 # temperature data (T) and convert to vector (.$T)
