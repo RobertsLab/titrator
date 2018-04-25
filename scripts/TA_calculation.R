@@ -225,3 +225,5 @@ TA_values <- mapply(TA_calcs, sample_data_list, salinities, sample_weights)
 
 # Creates a two column data frame.
 TA_df <- data.frame(sample_names, TA_values)
+
+print(TA_df, row.names = FALSE)
