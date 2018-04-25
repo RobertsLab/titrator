@@ -1,4 +1,7 @@
-##########
+#####################################################################################################
+# This script is used to calculate total alkalinity (μmol/kg) from HCl-titrated sea water samples.  #
+#####################################################################################################
+
 # This script is designed to be run as part of the R Studio Project 'titrator.Rproj' found in the top level of this repo.
 
 # It requires the file:
@@ -18,10 +21,13 @@
 # - Table of Measured Values
 
 
-# The output/product consists of the following:
+# The output consists of the following:
 # - A two column data frame with sample names and corresponding total alkalinty values (calculated using the seacarb library at() function)
 
-##########
+# - Total alkalinity is expressed as μmol/kg
+
+############################################################################################################################################
+
 
 # Load necessary libraries
 library(seacarb)
@@ -36,6 +42,8 @@ data_file <- ''
 salinities <- c()
 
 
+############################################################################################################################################
+
 
 # Extract date from filename
 ## Format: yyyymmdd
@@ -43,8 +51,6 @@ data_date <- data_file %>% basename() %>% substr(1, 10) %>% gsub("-", "", .) %>%
 
 # Load calibration log file
 calibration_daily_log <- read.csv(file = "data/cal_data/daily_calibration_log.csv")
-
-
 
 
 
@@ -63,7 +69,6 @@ pH3.5 <- calibration_daily_log %>% filter(date == data_date) %>% select(mean_E_p
 
 
 # mols to umols conversion
-
 mol_to_umol <- 1000000
 
 
