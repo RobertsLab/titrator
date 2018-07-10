@@ -37,7 +37,7 @@ library(tidyverse)
 ## Enter path to desired titration data file.
 data_file <- ''
 
-# Vector of salinity values (UNITS NEEDED)
+# Vector of salinity values, Practical Salinity Units (PSU)
 ### Manually enter a comma separated list of values which match the order of the samples in data_file
 salinities <- c()
 
@@ -72,8 +72,8 @@ pH3.5 <- calibration_daily_log %>% filter(date == data_date) %>% select(mean_E_p
 mol_to_umol <- 1000000
 
 
-# Column headers
-# V is volumen in mL
+# Column headers for output data frames
+# V is volume in mL
 # t is time in seconds
 # E is voltage in mV
 # T is temperature in C
@@ -100,11 +100,11 @@ total_samples <- as.numeric(sample_data[2,2] %>% substr(11,11))
 ### Extract sample names
 
 # Identifies rows starting with "Scope" in column 1
-sample_name_positions <- grep("^Scope", sample_data$V1) 
+sample_name_positions <- grep("^Scope", sample_data$V1)
 
 # Subsets the entire data set based on a subset of sample_name_positions.
 # Uses the length of the sample_name_positions vector divide by two because there are two entries per sample in the dataset.
-sample_list <- sample_data[sample_name_positions[1:(length(sample_name_positions)/2)], 2] 
+sample_list <- sample_data[sample_name_positions[1:(length(sample_name_positions)/2)], 2]
 
 # Pulls out the actual sample names using the number of characters, minus 1 to get rid of ending ")" in cells, as the stop value for substr.
 # Stores as a list, which will be useful for assigning data to each sample name later on.
@@ -122,8 +122,8 @@ weights_with_units <- sample_data[grep("^Sample size", sample_data$V1), 2]
 # Determines the string length by converting to characters and counting the characters.
 # Uses grep to search for rows in column 1 that begin with "Sample size".
 # Subtracts two from character length to account for "<space>g" at end of entry.
-weight_char_counts <- weights_with_units %>% 
-  nchar() %>% 
+weight_char_counts <- weights_with_units %>%
+  nchar() %>%
   as.numeric() - 2
 
 # Removes the last two characters from the weight field (<space>g)
@@ -188,7 +188,6 @@ for (item in 1:length(sample_data_list)){
 # - while loop to:
 # -- calculate cumulative acid added at each titration endpoint
 # - determine final cumulative acid amount and assign to last row of data frame
-# -- write output file for each sample to current directory
 for (item in 1:length(sample_data_list)){
   total_acid_vol <- EP1_Vf[[item]]
   final_acid_addition <- sample_data_list[[item]][nrow(sample_data_list[[item]]), "V"] - sample_data_list[[item]][(nrow(sample_data_list[[item]]) - 1), "V"]
