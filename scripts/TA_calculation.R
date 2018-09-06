@@ -6,7 +6,14 @@
 
 # It requires the file:
 
-# - daily_calibration_log.csv
+# - ../data/cal_data/daily_calibration_log.csv
+
+# It also requires the following information to be provided (see below):
+
+# - data_file <- ''
+# - salinities <- c()
+# - acid_density <-
+# - acid_concentration <-
 
 # This is a script designed to parse out sea water sample titration data
 # exported from LabX 2017 (v. 8.0.0; Mettler Toledo) with the following settings:
@@ -33,14 +40,44 @@
 library(seacarb)
 library(tidyverse)
 
+# Acid titrant density function.
+# Requires sample temperature.
+# Batch A10 density function - provided with titrant documentation
+A10_density <- function(temperature) {
+  1.02882 - (0.0001067*temperature) - (0.0000041*(temperature)^2)
+}
+A10_concentration <- 0.100215 #mol/kg
+
+
+# Acid titrant density function.
+# Requires sample temperature.
+# Batch A14 density function - provided with titrant documentation
+A14_density <- function(temperature) {
+  1.02900 - (0.0001233*temperature) - (0.0000037*(temperature)^2)
+}
+A14_concentration <- 0.000020 #mol/kg
+
+
+############################################################################################################################################
+
+# THE INFORMATION IN THIS SECTION REQUIRES MANUAL ENTRY #
+
+
 # Load file
-## Enter path to desired titration data file.
+## Enter path to desired titration data file within single quotes.
 data_file <- ''
 
 # Vector of salinity values, Practical Salinity Units (PSU)
-### Manually enter a comma separated list of values which match the order of the samples in data_file
+### Manually enter a comma separated list of values within the parentheses which match the order of the samples in data_file
 salinities <- c()
 
+# Function for current batch of acid density
+## Select acid batch from list just above this section (e.g. if using Batch A14: acid_density <- A14_density)
+acid_density <- 
+
+# Function for current batch of acid concentration
+## Select acid batch from list just above this section (e.g. if using Batch A14: acid_concentration <- A14_concentration)  
+acid_concentration <- 
 
 ############################################################################################################################################
 
@@ -52,15 +89,6 @@ data_date <- data_file %>% basename() %>% substr(1, 10) %>% gsub("-", "", .) %>%
 # Load calibration log file
 calibration_daily_log <- read.csv(file = "data/cal_data/daily_calibration_log.csv")
 
-
-
-# Acid titrant density function.
-# Requires sample temperature.
-# Batch A10 density function - provided with titrant documentation
-A10_density <- function(temperature) {
-  1.02882 - (0.0001067*temperature) - (0.0000041*(temperature)^2)
-}
-A10_concentration <- 0.100215 #mol/kg
 
 
 # Extract calibration voltages, based on sample data file run date.
@@ -212,7 +240,7 @@ TA_calcs <- function(df, salinities, sample_weights) {
   T_data <- df %>% filter(E <= pH3.0 & E >= pH3.5) %>% select(T) %>% .$T
   E_data <- df %>% filter(E <= pH3.0 & E >= pH3.5) %>% select(E) %>% .$E
   volume_data <- df %>% filter(E <= pH3.0 & E >= pH3.5) %>% select(V) %>% .$V
-  mol_to_umol*(at(S=salinities, T=T_data, C=A10_concentration, d=A10_density(mean(T_data)), weight=sample_weights, E=E_data, volume=volume_data))
+  mol_to_umol*(at(S=salinities, T=T_data, C=acid_concentration, d=acid_density(mean(T_data)), weight=sample_weights, E=E_data, volume=volume_data))
 }
 
 # Creates a numeric vector.
